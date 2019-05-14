@@ -27,8 +27,9 @@ static NSString *const AWSInfoUserAgent = @"UserAgent";
 static NSString *const AWSInfoCognitoIdentity = @"CognitoIdentity";
 static NSString *const AWSInfoCognitoIdentityPoolId = @"PoolId";
 static NSString *const AWSInfoCognitoUserPool = @"CognitoUserPool";
-
 static NSString *const AWSInfoIdentityManager = @"IdentityManager";
+
+static NSString * AWSConfigFileName = @"awsconfiguration";
 
 @interface AWSInfo()
 
@@ -52,7 +53,7 @@ static NSString *const AWSInfoIdentityManager = @"IdentityManager";
 - (instancetype)init {
     if (self = [super init]) {
         
-        NSString *pathToAWSConfigJson = [[NSBundle mainBundle] pathForResource:@"awsconfiguration"
+        NSString *pathToAWSConfigJson = [[NSBundle mainBundle] pathForResource:AWSConfigFileName
                                                                         ofType:@"json"];
         if (pathToAWSConfigJson) {
             NSData *data = [NSData dataWithContentsOfFile:pathToAWSConfigJson];
@@ -113,6 +114,10 @@ static NSString *const AWSInfoIdentityManager = @"IdentityManager";
 
 + (void)overrideCredentialsProvider:(AWSCognitoCredentialsProvider *)cognitoCredentialsProvider {
     AWSInfo.defaultAWSInfo.defaultCognitoCredentialsProvider = cognitoCredentialsProvider;
+}
+
++ (void)setAWSConfig:(NSString *)fileName {
+    AWSConfigFileName = fileName
 }
 
 - (AWSServiceInfo *)serviceInfo:(NSString *)serviceName
