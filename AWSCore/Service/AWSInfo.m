@@ -117,7 +117,7 @@ static NSString * AWSConfigFileName = @"awsconfiguration";
 }
 
 + (void)setAWSConfig:(NSString *)fileName {
-    AWSConfigFileName = fileName
+    AWSConfigFileName = fileName;
 }
 
 - (AWSServiceInfo *)serviceInfo:(NSString *)serviceName
