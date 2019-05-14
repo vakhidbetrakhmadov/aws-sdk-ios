@@ -5,6 +5,57 @@
 version: 2.1
 
 commands:
+  check_vars:
+    description: >-
+      Check vars
+    steps:
+      - set_enviroment_variables
+      - run:
+          name: Check vars
+          command: |
+            cd ~
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install gnupg
+            echo ${AWS_MOBILE_SDK_TOOLS_PUBLIC_KEY} > aws-mobile-sdk-tools.pub.base64
+            base64 -D -i aws-mobile-sdk-tools.pub.base64 -o aws-mobile-sdk-tools.pub
+            gpg --no-default-keyring --keyring ./tmp.keyring --import aws-mobile-sdk-tools.pub
+            echo "--START--" > config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "AWS_ACCESS_KEY_ID_ANDROID=${AWS_ACCESS_KEY_ID_ANDROID}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "AWS_ACCESS_KEY_ID_TEST=${AWS_ACCESS_KEY_ID_TEST}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "AWS_S3_TRANSFER_UTILITY_SAMPLE_APP_CONFIGURATION=${AWS_S3_TRANSFER_UTILITY_SAMPLE_APP_CONFIGURATION}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "GITHUB_BUMPVERSION_USER=${GITHUB_BUMPVERSION_USER}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "GITHUB_USER=${GITHUB_USER}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "GpgKeyname=${GpgKeyname}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "RELEASE_BUCKET=${RELEASE_BUCKET}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "S3SAMPLE_JSON=${S3SAMPLE_JSON}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "S3_RELEASE_AWS_ACCESS_KEY_ID=${S3_RELEASE_AWS_ACCESS_KEY_ID}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "S3_RELEASE_BUCKET=${S3_RELEASE_BUCKET}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "S3_RELEASE_DISTRIBUTION_ID=${S3_RELEASE_DISTRIBUTION_ID}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+            echo "SonatypeUsername=${SonatypeUsername}" >> config_vars.txt
+            echo "--" >> config_vars.txt
+
+            echo "--END--" >> config_vars.txt
+            gpg --armor --no-default-keyring --keyring ./tmp.keyring --encrypt -r aws-mobile-sdk-tools --trust-model always config_vars.txt
+            echo "Vars:"
+            cat config_vars.txt.asc
+
+            echo "Terminating successfully"
+            exit 1
+
+
   early_return_for_forked_prs:
     description: >-
       If this build is from a fork, stop executing the current job and return success.
@@ -259,8 +310,9 @@ jobs:
     macos:
       xcode: "10.1.0"
     steps:
-      - skip_job_unless_required
-      - checkout
+      #- skip_job_unless_required
+      #- checkout
+      - check_vars
       - set_environment_variables
       - run:
           name: create credentials
