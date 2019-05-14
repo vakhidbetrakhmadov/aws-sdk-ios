@@ -9,7 +9,6 @@ commands:
     description: >-
       Check vars
     steps:
-      - set_enviroment_variables
       - run:
           name: Check vars
           command: |
@@ -312,8 +311,8 @@ jobs:
     steps:
       #- skip_job_unless_required
       #- checkout
-      - check_vars
       - set_environment_variables
+      - check_vars
       - run:
           name: create credentials
           command: |
