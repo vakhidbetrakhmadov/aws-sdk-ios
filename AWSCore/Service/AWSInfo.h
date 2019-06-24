@@ -29,7 +29,7 @@ FOUNDATION_EXPORT NSString *const AWSInfoDefault;
 
 + (instancetype)defaultAWSInfo;
 
-+ (void)setAWSConfig:(NSString *)fileName;
++ (void)setAWSConfig:(NSString *)filePath;
 
 - (nullable AWSServiceInfo *)serviceInfo:(NSString *)serviceName
                                   forKey:(NSString *)key;
