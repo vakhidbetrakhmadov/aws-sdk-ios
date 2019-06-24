@@ -56,7 +56,7 @@ static NSString * AWSConfigFilePath = nil;
         NSString *pathToAWSConfigJson = nil;
         
         if (AWSConfigFilePath != nil) {
-            pathToAWSConfigJson = AWSConfigFilePath
+            pathToAWSConfigJson = AWSConfigFilePath;
         } else {
             pathToAWSConfigJson = [[NSBundle mainBundle] pathForResource:@"awsconfiguration" ofType:@"json"];
         }
